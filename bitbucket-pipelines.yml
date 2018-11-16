@@ -9,7 +9,7 @@ pipelines:
           - npm install
           - npm run build
         artifacts:
-          - build/**
+          - '**/*'
     - step:
         name: Deploy to AWS
         deployment: production
