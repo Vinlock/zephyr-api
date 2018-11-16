@@ -1,0 +1,22 @@
+{
+  "plugins": [
+    [
+      "transform-class-properties",
+      { "spec": true }
+    ],
+    [
+      "transform-object-rest-spread",
+      { "spec": true }
+    ],
+    ["babel-plugin-transform-builtin-extend", {
+      "globals": ["Error"],
+      "approximate": true
+    }]
+  ],
+  "ignore": [
+    "**/*.test.js"
+  ],
+  "presets": [
+    "env"
+  ]
+}
