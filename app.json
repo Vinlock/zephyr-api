@@ -1,0 +1,14 @@
+{
+  "apps": [{
+    "name": "zephyr-api",
+    "script": "/home/ubuntu/app/dist/server.js",
+    "instances": 0,
+    "autorestart": true,
+    "exec_mode": "cluster",
+    "log_date_format": "YYYY-MM-DD HH:mm:ss",
+    "merge_logs": true,
+    "env": {
+      "PORT": 4000
+    }
+  }]
+}
