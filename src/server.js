@@ -1,3 +1,4 @@
+require('babel-polyfill');
 require('babel-register');
 const express = require('express');
 const bodyParser = require('body-parser');
