@@ -19,8 +19,8 @@
     "moment": "2.22.2",
     "mongoose": "^5.3.0",
     "response-time": "^2.3.2",
-    "stream-rally": "1.0.8",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "babel-register": "^6.26.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -31,7 +31,6 @@
     "babel-plugin-transform-es2015-arrow-functions": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
-    "babel-register": "^6.26.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "circular-json": "^0.5.5",
