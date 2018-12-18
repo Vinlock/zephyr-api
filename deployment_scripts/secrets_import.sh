@@ -10,4 +10,4 @@ done
 
 printf $RESULT
 
-echo $RESULT > /home/ubuntu/app/.env
+printf $RESULT > /home/ubuntu/app/.env
