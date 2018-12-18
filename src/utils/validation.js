@@ -62,6 +62,7 @@ const validateEmail = (email) => {
   const domainParts = parts[1].split(".");
   return !domainParts.some(part => part.length > 63);
 };
+
 module.exports = {
   containsCharacters,
   containsLetters,
