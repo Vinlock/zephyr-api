@@ -96,9 +96,12 @@ const callback = () => [
       expiresIn: '7d',
     });
 
-    res.cookie('zjwt', token, {
+    const cookieOptions = {
       maxAge: 604800000,
-    });
+      domain: process.env.COOKIE_DOMAIN,
+    };
+
+    res.cookie('zjwt', token, cookieOptions);
 
     if (req.user.new) {
       req.user.new = false;
