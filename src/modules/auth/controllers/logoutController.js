@@ -1,8 +1,11 @@
 const asyncErrorHandler = require('../../../utils/asyncErrorHandler');
 
 const logoutController = async (req, res) => {
-  res.cookie('zjwt', null);
-  console.log('cookie deleted');
+  req.logger.log('session.logout', {});
+  const cookieOptions = {
+    domain: process.env.COOKIE_DOMAIN,
+  };
+  res.cookie('zjwt', null, cookieOptions);
   res.json({});
 };
 

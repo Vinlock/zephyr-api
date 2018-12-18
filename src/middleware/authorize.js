@@ -12,10 +12,16 @@ const authorize = () => async (req, res, next) => {
         decoded = JWT.verify(token, process.env.JWT_SECRET);
         req.jwt = decoded;
         req.user = await User.findById(decoded.id);
-        console.log(req.user);
+        req.logger.addMetadata('user', req.user);
+        req.logger.log('user.uauthenticated', {
+          success: true,
+        });
         res.set('X-Authenticated', Buffer.from(JSON.stringify(req.user))
           .toString('base64'));
       } catch (err) {
+        req.logger.log('user.uauthenticated', {
+          success: false,
+        });
         res.set('X-Authenticated', Buffer.from(JSON.stringify({
           no_auth: true,
         })).toString('base64'));

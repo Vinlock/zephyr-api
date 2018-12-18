@@ -23,6 +23,7 @@ const logRequest = () => (req, res, next) => {
     ip: req.ipAddress,
     route: req.route,
     secure: req.secure,
+    session: req.session,
   });
 
   return next();

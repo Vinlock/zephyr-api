@@ -71,6 +71,9 @@ const authInvite = () => [
     const { invite } = req.params;
     req.session.invite = invite;
     req.session.save();
+    req.logger.log('discord.authInvite', {
+      invite: req.session.invite,
+    });
     console.log('authInvite', req.session.invite);
     return next();
   },
@@ -82,9 +85,15 @@ const authInvite = () => [
 const callback = () => [
   (req, res, next) => passport.authenticate('discord', (err, user, info) => {
     if (err) {
-      res.cookie('zjwt', null);
-      res.redirect(`${DISCORD_REDIRECT_URL}?error=${err.message}`);
+      const redirectUrl = `${DISCORD_REDIRECT_URL}?error=${err.message}`;
+      req.logger.error('discord.oauth.error', { redirectUrl });
+      const cookieOptions = {
+        domain: process.env.COOKIE_DOMAIN,
+      };
+      res.cookie('zjwt', null, cookieOptions);
+      res.redirect(redirectUrl);
     } else {
+      req.logger.error('discord.oauth.user', { user });
       req.user = user;
       return next();
     }
@@ -106,10 +115,20 @@ const callback = () => [
     if (req.user.new) {
       req.user.new = false;
       req.user.save(() => {
-        res.redirect(`${DISCORD_REDIRECT_URL}?success=JOINED`);
+        const redirectUrl = `${DISCORD_REDIRECT_URL}?success=JOINED`;
+        req.logger.log('discord.oauth.success', {
+          redirectUrl,
+          new: req.user.new,
+        });
+        res.redirect(redirectUrl);
       });
     } else {
-      res.redirect(DISCORD_REDIRECT_URL);
+      const redirectUrl = DISCORD_REDIRECT_URL;
+      req.logger.log('discord.oauth.success', {
+        redirectUrl,
+        new: req.user.new,
+      });
+      res.redirect(redirectUrl);
     }
   },
 ];

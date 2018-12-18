@@ -6,7 +6,7 @@ const uuid = require('uuid/v4');
  */
 const requestIdGenerator = () => (req, res, next) => {
   req.serverRequestId = uuid();
-  res.set({ 'x-nc-request-id': req.serverRequestId });
+  res.set({ 'x-zeph-request-id': req.serverRequestId });
   req.logger.addMetadata('serverRequestId', req.serverRequestId);
   return next();
 };
