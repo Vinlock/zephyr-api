@@ -11,7 +11,7 @@ const APIError = require('./utils/APIError');
 const router = require('./router');
 const responseTime = require('response-time');
 const session = require('express-session');
-// const store = require('./lib/mongoSessionStore')(session);
+const store = require('./lib/mongoSessionStore')(session);
 const loggingMiddleware = require('./middleware/logger');
 const requestIdMiddleware = require('./middleware/requestIdGenerator');
 const logRequestMiddleware = require('./middleware/logRequest');
@@ -42,7 +42,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: { secure: process.env.NODE_ENV === 'production' },
-  // store: store,
+  store: store,
 }));
 
 app.use(loggingMiddleware());
