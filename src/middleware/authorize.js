@@ -13,13 +13,14 @@ const authorize = () => async (req, res, next) => {
         req.jwt = decoded;
         req.user = await User.findById(decoded.id);
         req.logger.addMetadata('user', req.user);
-        req.logger.log('user.uauthenticated', {
+        req.logger.log('user.authenticated', {
           success: true,
+          user: req.user,
         });
         res.set('X-Authenticated', Buffer.from(JSON.stringify(req.user))
           .toString('base64'));
       } catch (err) {
-        req.logger.log('user.uauthenticated', {
+        req.logger.log('user.authenticated', {
           success: false,
         });
         res.set('X-Authenticated', Buffer.from(JSON.stringify({

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const getGuildMember = require('../../lib/discord/getGuildMember');
-const { roles } = require('../../lib/discord/data');
+const DiscordClient = require('../../lib/discord/discordClient');
+const { roles } = require('../../lib/discord/enums');
 const UserProfile = require('./UserProfile');
 
 const { Schema } = mongoose;
@@ -50,7 +50,8 @@ userSchema.methods.isAdmin = function() {
 userSchema.methods.isLegionMember = function() {
   return this.populate('discord').execPopulate()
     .then(function (doc) {
-      return getGuildMember(doc.discord.id)
+      const discord = new DiscordClient();
+      return discord.getGuildMember(doc.discord.id)
         .then((member) => member.roles.includes(roles.legion))
         .catch(() => false);
     });

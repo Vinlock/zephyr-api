@@ -34,6 +34,16 @@ discordConnectionSchema.virtual('user', {
 });
 
 discordConnectionSchema.statics = {
+  updateConnection: function updateConnection(currentAccessToken, currentRefreshToken, accessToken, refreshToken) {
+    return this.find({
+      accessToken: currentAccessToken,
+      refreshToken: currentRefreshToken,
+    }).then(function (connection) {
+      connection.accessToken = accessToken;
+      connection.refreshToken = refreshToken;
+      return connection.save()
+    });
+  },
   userFromDiscord: function userFromDiscord(profile, accessToken, refreshToken) {
     const self = this;
     return new Promise(function (res, rej) {

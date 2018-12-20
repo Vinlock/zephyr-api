@@ -1,10 +1,5 @@
-const getGames = require('../../../lib/discord/getGames');
-const getLangs = require('../../../lib/discord/getLangs');
-const getGuildMember = require('../../../lib/discord/getGuildMember');
-const updateGame = require('../../../lib/discord/updateGame');
-const updateLang = require('../../../lib/discord/updateLanguage');
 const asyncErrorHandler = require('../../../utils/asyncErrorHandler');
-const { gameRoles, langRoles } = require('../../../lib/discord/data');
+const { gameRoles, langRoles } = require('../../../lib/discord/enums');
 
 const getProfile = async (req, res, next) => {
   try {
@@ -12,7 +7,7 @@ const getProfile = async (req, res, next) => {
       .populate('discord')
       .populate('profile')
       .execPopulate();
-    const userData = await getGuildMember(user.discord.id);
+    const userData = await req.discord.getGuildMember(user.discord.id);
     const { roles } = userData;
     const { username, discriminator } = userData.user;
     let result = {};
@@ -34,6 +29,7 @@ const getProfile = async (req, res, next) => {
     });
 
     // Profile
+    req.logger.log('req.user.profile', req.user.profile);
     const profile = req.user.profile;
     result.profile = {
       twitchUsername: profile.twitch,
@@ -54,9 +50,9 @@ const updateProfileGame = async (req, res, next) => {
   const discordId = user.discord.id;
   const { game } = req.params;
   const { value } = req.body;
-  const success = await updateGame(discordId, game, value);
+  const success = await req.discord.updateGame(discordId, game, value);
   if (success) {
-    const games = await getGames(discordId);
+    const games = await req.discord.getGames(discordId);
     return res.json(games);
   }
 };
@@ -66,9 +62,9 @@ const updateProfileLanguage = async (req, res) => {
   const discordId = user.discord.id;
   const { language } = req.params;
   const { value } = req.body;
-  const success = await updateLang(discordId, language, value);
+  const success = await req.discord.updateLanguage(discordId, language, value);
   if (success) {
-    const langs = await getLangs(discordId);
+    const langs = await req.discord.getLangs(discordId);
     return res.json(langs);
   }
 };

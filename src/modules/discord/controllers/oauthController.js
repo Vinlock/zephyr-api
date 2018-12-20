@@ -3,9 +3,8 @@ const OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
 const DiscordConnection = require('../../../db/models/DiscordConnection');
 const JWT = require('jsonwebtoken');
 const axios = require('axios');
-// const addGuildMember = require('../../../lib/discord/addGuildMember');
-const getGuildMember = require('../../../lib/discord/getGuildMember');
-const { roles } = require('../../../lib/discord/data')
+const DiscordClient = require('../../../lib/discord/discordClient');
+const { roles } = require('../../../lib/discord/enums');
 
 const {
   DISCORD_CLIENT_ID,
@@ -28,7 +27,8 @@ const client = new OAuth2Strategy({
   if (!profile.verified) {
     done(new Error('UNVERIFIED'), null);
   } else {
-    getGuildMember(profile.id)
+    const discord = new DiscordClient();
+    discord.getGuildMember(profile.id)
       .then(function (member) {
         if (member.roles.includes(roles.legion)) {
           // addGuildMember(accessToken, profile.id);
@@ -40,8 +40,8 @@ const client = new OAuth2Strategy({
               done(err, null);
             });
         }
-      }).catch(function () {
-        done(new Error('NOT_LEGION'), null);
+      }).catch(function (err) {
+        done(err, null);
       });
   }
 });
@@ -85,13 +85,27 @@ const authInvite = () => [
 const callback = () => [
   (req, res, next) => passport.authenticate('discord', (err, user, info) => {
     if (err) {
-      const redirectUrl = `${DISCORD_REDIRECT_URL}?error=${err.message}`;
-      req.logger.error('discord.oauth.error', { redirectUrl });
       const cookieOptions = {
         domain: process.env.COOKIE_DOMAIN,
       };
       res.cookie('zjwt', null, cookieOptions);
-      res.redirect(redirectUrl);
+
+      let errorMessage = null;
+      switch (err.message) {
+        case 'MEMBER_NOT_FOUND':
+          errorMessage = 'NOT_LEGION';
+          break;
+        case 'UNVERIFIED':
+          errorMessage = err.message``;
+          break;
+        default:
+          errorMessage = 'INTERNAL_ERROR';
+          break;
+      }
+      req.logger.error('discord.oauth.error', {
+        error: err.message,
+      });
+      res.redirect(`${DISCORD_REDIRECT_URL}?error=${errorMessage}`);
     } else {
       req.logger.error('discord.oauth.user', { user });
       req.user = user;

@@ -18,6 +18,7 @@ const logRequestMiddleware = require('./middleware/logRequest');
 const axiosMiddleware = require('./middleware/axios');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
+const discordMiddleware = require('./middleware/discordApiMiddleware');
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -65,6 +66,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(mongoSanitize());
 
 app.use(validator());
+
+app.use(discordMiddleware());
 
 app.use(router);
 

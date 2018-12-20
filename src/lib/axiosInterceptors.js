@@ -1,6 +1,4 @@
-const axios = require('axios');
-
-const _logRequest = (request) => {
+const _logRequest = (callback) => (request) => {
   const requestLog = {
     timeout: request.timeout || null,
     headers: request.headers || null,
@@ -8,6 +6,7 @@ const _logRequest = (request) => {
     baseURL: request.baseURL || null,
     path: request.url || null,
     url: `${request.baseURL}${request.url}` || null,
+    session: request.session,
   };
   if (request.data) {
     try {
@@ -17,15 +16,12 @@ const _logRequest = (request) => {
     }
   }
 
-  this.logger.log('request', {
-    request: requestLog,
-    additionalData: this.additionalData,
-  });
+  callback(requestLog);
 
   return request;
 };
 
-const _logRequestError = (error) => {
+const _logRequestError = (callback) => (error) => {
   const requestErrorLog = {
     response: {
       data: error.response.data || null,
@@ -42,15 +38,12 @@ const _logRequestError = (error) => {
     },
   };
 
-  this.logger.err('request.error', {
-    error: requestErrorLog,
-    additionalData: this.additionalData,
-  });
+  callback(requestErrorLog);
 
   return Promise.reject(error);
 };
 
-const _logResponse = (response) => {
+const _logResponse = (callback) => (response) => {
   const responseLog = {
     response: {
       status: response.status || null,
@@ -68,15 +61,12 @@ const _logResponse = (response) => {
     },
   };
 
-  this.logger.log('response', {
-    response: responseLog,
-    additionalData: this.additionalData,
-  });
+  callback(responseLog);
 
   return response;
 };
 
-const _logResponseError = (error) => {
+const _logResponseError = (callback) => (error) => {
   const responseErrorLog = {};
 
   if (error.response !== undefined) {
@@ -109,22 +99,14 @@ const _logResponseError = (error) => {
     message: error.message || null,
   };
 
-  this.logger.err('response.error', {
-    error: responseErrorLog,
-    additionalData: this.additionalData,
-  });
+  callback(responseErrorLog);
 
   return Promise.reject(error);
 };
 
-const create = (options) => {
-  const instance = axios.create(options);
-
-  // Logging Interceptors
-  instance.interceptors.request.use(_logRequest, _logRequestError);
-  instance.interceptors.response.use(_logResponse, _logResponseError);
-
-  return instance;
+module.exports = {
+  _logRequest,
+  _logRequestError,
+  _logResponse,
+  _logResponseError,
 };
-
-module.exports = create;
