@@ -44,26 +44,30 @@ discordConnectionSchema.statics = {
       return connection.save()
     });
   },
-  userFromDiscord: function userFromDiscord(profile, accessToken, refreshToken) {
+  userFromDiscord: function userFromDiscord(profile, member, accessToken, refreshToken) {
     const self = this;
     return new Promise(function (res, rej) {
       self.findOne({ id: profile.id }).populate('user').exec()
         .then(function (discordConnection) {
+          const name = member.nick || profile.username;
           if (discordConnection) {
             discordConnection.accessToken = accessToken;
             discordConnection.refreshToken = refreshToken;
             discordConnection.save()
               .then(function (doc) {
-                doc.user.username = `${profile.username}#${profile.discriminator}`;
+                console.log('doc', doc);
+                console.log('name', name);
+                doc.user.username = `${name}#${profile.discriminator}`;
                 doc.user.admin = profile.id === process.env.DISCORD_ADMIN;
                 doc.user.save()
                   .then(function (doc) {
+                    console.log('doc', doc);
                     res(doc);
                   });
               });
           } else {
             const user = new User({
-              username: `${profile.username}#${profile.discriminator}`,
+              username: `${name}#${profile.discriminator}`,
               admin: profile.id === process.env.DISCORD_ADMIN,
             });
             user.save()

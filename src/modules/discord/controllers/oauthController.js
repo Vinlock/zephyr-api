@@ -31,8 +31,7 @@ const client = new OAuth2Strategy({
     discord.getGuildMember(profile.id)
       .then(function (member) {
         if (member.roles.includes(roles.legion)) {
-          // addGuildMember(accessToken, profile.id);
-          DiscordConnection.userFromDiscord(profile, accessToken, refreshToken)
+          DiscordConnection.userFromDiscord(profile, member, accessToken, refreshToken)
             .then((user) => {
               done(null, user);
             })

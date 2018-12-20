@@ -7,12 +7,14 @@ const getProfile = async (req, res, next) => {
       .populate('discord')
       .populate('profile')
       .execPopulate();
+    console.log('user', user);
     const userData = await req.discord.getGuildMember(user.discord.id);
     const { roles } = userData;
     const { username, discriminator } = userData.user;
     let result = {};
     // User Data
-    result.username = `${username}#${discriminator}`;
+    const name = userData.nick || username;
+    result.username = `${name}#${discriminator}`;
     result.admin = await req.user.isAdmin() ? true : undefined;
     result.legionMember = await req.user.isLegionMember();
     result.roles = {
