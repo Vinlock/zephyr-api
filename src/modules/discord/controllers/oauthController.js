@@ -67,13 +67,14 @@ const auth = () => [
 
 const authInvite = () => [
   (req, res, next) => {
+    res.cookie('zjwt', null);
+
     const { invite } = req.params;
     req.session.invite = invite;
     req.session.save();
     req.logger.log('discord.authInvite', {
       invite: req.session.invite,
     });
-    console.log('authInvite', req.session.invite);
     return next();
   },
   passport.authenticate('discord', {
@@ -84,11 +85,6 @@ const authInvite = () => [
 const callback = () => [
   (req, res, next) => passport.authenticate('discord', (err, user, info) => {
     if (err) {
-      const cookieOptions = {
-        domain: process.env.COOKIE_DOMAIN,
-      };
-      res.cookie('zjwt', null, cookieOptions);
-
       let errorMessage = null;
       switch (err.message) {
         case 'MEMBER_NOT_FOUND':
@@ -120,6 +116,7 @@ const callback = () => [
 
     const cookieOptions = {
       maxAge: 604800000,
+      path: '/',
       domain: process.env.COOKIE_DOMAIN,
     };
 
