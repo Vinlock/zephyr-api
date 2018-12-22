@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const User = require('./User');
 
 const { Schema } = mongoose;
 
@@ -46,6 +45,7 @@ discordConnectionSchema.statics = {
   },
   userFromDiscord: function userFromDiscord(profile, member, accessToken, refreshToken) {
     const self = this;
+    const User = this.model('User');
     return new Promise(function (res, rej) {
       self.findOne({ id: profile.id }).populate('user').exec()
         .then(function (discordConnection) {
