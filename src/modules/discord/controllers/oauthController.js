@@ -12,6 +12,7 @@ const {
   DISCORD_CALLBACK_URL,
   DISCORD_REDIRECT_URL,
   JWT_SECRET,
+  COOKIE_DOMAIN,
 } = process.env;
 
 const scopes = ['identify', 'email', 'guilds.join'];
@@ -119,11 +120,11 @@ const callback = () => [
 
     const cookieOptions = {
       maxAge: 604800000,
-      domain: process.env.COOKIE_DOMAIN,
+      domain: COOKIE_DOMAIN,
     };
 
     req.logger.log('discord.token', { token });
-    res.cookie('zjwt', token, cookieOptions);
+    res.cookie('zjwt_token', token, cookieOptions);
 
     if (req.user.new) {
       req.user.new = false;
