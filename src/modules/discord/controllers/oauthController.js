@@ -72,8 +72,6 @@ const auth = () => [
 
 const authInvite = () => [
   (req, res, next) => {
-    res.cookie('zjwt', null);
-
     const { invite } = req.params;
     req.session.invite = invite;
     req.session.save();
@@ -124,6 +122,7 @@ const callback = () => [
       domain: process.env.COOKIE_DOMAIN,
     };
 
+    req.logger.log('discord.token', { token });
     res.cookie('zjwt', token, cookieOptions);
 
     if (req.user.new) {
