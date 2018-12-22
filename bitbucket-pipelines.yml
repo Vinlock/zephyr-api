@@ -16,4 +16,4 @@ pipelines:
         image: atlassian/pipelines-awscli
         script:
           - aws deploy push --application-name zephyr-api --s3-location s3://bitbucket-artifacts/live-zephyr-api --ignore-hidden-files
-          - aws deploy create-deployment --application-name zephyr-api --s3-location bucket=bitbucket-artifacts,key=/live-zephyr-api,bundleType=zip --deployment-group-name production
+          - aws deploy create-deployment --application-name zephyr-api --s3-location bucket=bitbucket-artifacts,key=live-zephyr-api,bundleType=zip --deployment-group-name production
