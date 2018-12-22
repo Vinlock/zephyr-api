@@ -121,7 +121,6 @@ const callback = () => [
 
     const cookieOptions = {
       maxAge: 604800000,
-      path: '/',
       domain: process.env.COOKIE_DOMAIN,
     };
 
