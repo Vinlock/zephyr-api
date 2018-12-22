@@ -103,6 +103,12 @@ const callback = () => [
       }
       req.logger.error('discord.oauth.error', {
         error: err.message,
+        stacktrace: err.stack,
+        filename: err.filename,
+        lineNumber: err.lineNumber,
+        name: err.name,
+        columnNumber: err.columnNumber,
+        toString: err.toString(),
       });
       res.redirect(`${DISCORD_REDIRECT_URL}?error=${errorMessage}`);
     } else {
