@@ -24,6 +24,11 @@ const client = new OAuth2Strategy({
   callbackURL: DISCORD_CALLBACK_URL,
   scope: scopes
 }, function(accessToken, refreshToken, profile, done) {
+  console.log('discord.profile', JSON.stringify({
+    accessToken,
+    refreshToken,
+    profile,
+  }));
   if (!profile.verified) {
     done(new Error('UNVERIFIED'), null);
   } else {
