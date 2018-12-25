@@ -1,3 +1,1 @@
-const accountRouter = require('./accountRouter');
-
-module.exports = accountRouter;
+module.exports = require('./accountRouter');

@@ -12,6 +12,4 @@ router.use('/auth', authRouter);
 router.use('/account', accountRouter);
 router.use('/discord', discordRouter);
 
-router.use('/:invite', oauthController.authInvite());
-
 module.exports = router;
