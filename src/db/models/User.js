@@ -59,15 +59,18 @@ userSchema.methods.isLegionMember = function() {
 
 userSchema.post('save', function (doc, next) {
   UserProfile.findOne({ userId: doc._id })
-    .then(function (foundProfile) {
-      if (!foundProfile) {
-        const profile = new UserProfile({
-          userId: doc._id,
-        });
-        profile.save(() => next());
-      }
+    .then(function () {
+      console.log('found.tester');
       next();
-    });
+    })
+    .catch(function (err) {
+      console.log('tester.test');
+      const profile = new UserProfile({
+        userId: doc._id,
+      });
+        profile.save(() => next());
+      next();
+    })
 });
 
 const User = mongoose.model('User', userSchema);
