@@ -12,7 +12,7 @@ const userProfileSchema = new Schema({
     type: String,
     require: false,
     unique: true,
-    default: '',
+    default: null,
   },
 });
 
