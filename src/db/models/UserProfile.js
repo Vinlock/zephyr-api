@@ -11,7 +11,7 @@ const userProfileSchema = new Schema({
   twitch: {
     type: String,
     require: false,
-    unique: true,
+    unique: false,
     default: null,
   },
 });
