@@ -4,7 +4,7 @@ files:
   - source: /
     destination: /home/ubuntu/app
 permissions:
-  - object: ./home/ubuntu/app
+  - object: /home/ubuntu/app
     owner: ubuntu
     group: ubuntu
     mode: 777
