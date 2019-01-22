@@ -21,6 +21,7 @@ pipelines:
               COMMAND: "upload"
               APPLICATION_NAME: "zephyr-api"
               ZIP_FILE: "live-zephyr-api.zip"
+              S3_BUCKET: "bitbucket-artifacts"
           - pipe: atlassian/aws-code-deploy:0.2.0
             variables:
               AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
