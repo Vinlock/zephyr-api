@@ -13,25 +13,7 @@ pipelines:
     - step:
         name: Deploy to AWS
         deployment: production
+        image: atlassian/pipelines-awscli
         script:
-          - pipe: atlassian/aws-code-deploy:0.2.0
-            variables:
-              AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
-              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
-              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-              COMMAND: "upload"
-              APPLICATION_NAME: "zephyr-api"
-              ZIP_FILE: "live-zephyr-api.zip"
-              S3_BUCKET: "bitbucket-artifacts"
-              VERSION_LABEL: "live-zephyr-api-1.0.0"
-          - pipe: atlassian/aws-code-deploy:0.2.0
-            variables:
-              AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
-              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
-              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-              COMMAND: "deploy"
-              APPLICATION_NAME: "zephyr-api"
-              DEPLOYMENT_GROUP: "production"
-              WAIT: "true"
-              S3_BUCKET: "bitbucket-artifacts"
-              VERSION_LABEL: "live-zephyr-api-1.0.0"
+          - aws deploy push --application-name zephyr-api --s3-location s3://bitbucket-artifacts/live-zephyr-api --ignore-hidden-files
+          - aws deploy create-deployment --application-name zephyr-api --s3-location bucket=bitbucket-artifacts,key=live-zephyr-api,bundleType=zip --deployment-group-name production
