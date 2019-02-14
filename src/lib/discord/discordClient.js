@@ -60,10 +60,10 @@ class DiscordClient {
       },
     });
 
-    const logRequest = request => this.eventLogger.log('request', request);
-    const logRequestError = requestError => this.eventLogger.error('request.error', requestError);
-    const logResponse = response => this.eventLogger.log('response', response);
-    const logResponseError = responseError => this.eventLogger.log('response.error', responseError);
+    const logRequest = request => this.eventLogger.log('discord.request', request);
+    const logRequestError = requestError => this.eventLogger.error('discord.request.error', requestError);
+    const logResponse = response => this.eventLogger.log('discord.response', response);
+    const logResponseError = responseError => this.eventLogger.log('discord.response.error', responseError);
 
     // Logging Interceptors
     instance.interceptors.request.use(interceptors._logRequest(logRequest), interceptors._logRequestError(logRequestError));

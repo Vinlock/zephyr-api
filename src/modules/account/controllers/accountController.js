@@ -38,7 +38,11 @@ const getProfile = async (req, res, next) => {
     };
 
     // Response
-    res.json(result);
+    res.json({
+      ...result,
+      discordId: user.discord.id,
+      userId: user._id,
+    });
   } catch (err) {
     if (err.message === 'MEMBER_NOT_FOUND') {
       err.errorCode = 'MEMBER_NOT_FOUND';

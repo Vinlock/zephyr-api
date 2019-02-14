@@ -9,8 +9,8 @@ const { roles } = require('../../../lib/discord/enums');
 const {
   DISCORD_CLIENT_ID,
   DISCORD_CLIENT_SECRET,
-  DISCORD_CALLBACK_URL,
   DISCORD_REDIRECT_URL,
+  DISCORD_CALLBACK_URL,
   JWT_SECRET,
   COOKIE_DOMAIN,
 } = process.env;
@@ -31,23 +31,32 @@ const client = new OAuth2Strategy({
     profile,
   }));
   if (!profile.verified) {
+    console.log('unverified');
     done(new Error('UNVERIFIED'), null);
   } else {
-    const discord = new DiscordClient();
-    discord.getGuildMember(profile.id)
-      .then(function (member) {
-        if (member.roles.includes(roles.legion)) {
-          DiscordConnection.userFromDiscord(profile, member, accessToken, refreshToken)
-            .then((user) => {
-              done(null, user);
-            })
-            .catch((err) => {
-              done(err, null);
-            });
-        }
-      }).catch(function (err) {
+    const run = async function () {
+      const discord = new DiscordClient();
+      console.log('discord.client');
+      let member = null;
+      try {
+        member = await discord.getGuildMember(profile.id);
+        console.log('member', member);
+      } catch (err) {
+        await discord.addGuildMember(accessToken, profile.id);
+        member = await discord.getGuildMember(profile.id);
+        console.log('member', member);
+      }
+      try {
+        const user = await DiscordConnection.userFromDiscord(profile, member, accessToken, refreshToken);
+        console.log('user', user);
+        done(null, user);
+      } catch (err) {
         done(err, null);
-      });
+      }
+    };
+    run().catch(function (err) {
+      done(err, null);
+    });
   }
 });
 
@@ -57,6 +66,10 @@ client.userProfile = (accessToken, done) => {
       Authorization: `Bearer ${accessToken}`,
     },
   }).then(response => response.data)
+    .then((data) => {
+      console.log('userProfile', data);
+      return data;
+    })
     .then(data => done(null, data))
     .catch(err => done(err, null));
 };
@@ -66,6 +79,12 @@ const strategy = () => {
 };
 
 const auth = () => [
+  (req, res, next) => {
+    req.session.oauth_redirect = req.query.redirect_url || DISCORD_REDIRECT_URL;
+    req.session.save();
+    console.log('set:req.session', req.session);
+    return next();
+  },
   passport.authenticate('discord', {
     scope: scopes
   }),
@@ -89,6 +108,7 @@ const authInvite = () => [
 const callback = () => [
   (req, res, next) => passport.authenticate('discord', (err, user, info) => {
     if (err) {
+      console.error('discord.error', err);
       let errorMessage = null;
       switch (err.message) {
         case 'MEMBER_NOT_FOUND':
@@ -101,6 +121,7 @@ const callback = () => [
           errorMessage = 'INTERNAL_ERROR';
           break;
       }
+      console.log('errorMessage', errorMessage);
       req.logger.error('discord.oauth.error', {
         error: err.message,
         stacktrace: err.stack,
@@ -110,7 +131,8 @@ const callback = () => [
         columnNumber: err.columnNumber,
         toString: err.toString(),
       });
-      res.redirect(`${DISCORD_REDIRECT_URL}?error=${errorMessage}`);
+      console.log('error:req.session', req.session);
+      res.redirect(`${req.session.oauth_redirect}?error=${errorMessage}`);
     } else {
       req.logger.error('discord.oauth.user', { user });
       req.user = user;
@@ -135,7 +157,8 @@ const callback = () => [
     if (req.user.new) {
       req.user.new = false;
       req.user.save(() => {
-        const redirectUrl = `${DISCORD_REDIRECT_URL}?success=JOINED`;
+        console.log('joined:req.session', req.session);
+        const redirectUrl = `${req.session.oauth_redirect}?success=JOINED`;
         req.logger.log('discord.oauth.success', {
           redirectUrl,
           new: req.user.new,
@@ -143,7 +166,8 @@ const callback = () => [
         res.redirect(redirectUrl);
       });
     } else {
-      const redirectUrl = DISCORD_REDIRECT_URL;
+      console.log('redirectUrl:req.session', req.session);
+      const redirectUrl = req.session.oauth_redirect;
       req.logger.log('discord.oauth.success', {
         redirectUrl,
         new: req.user.new,
