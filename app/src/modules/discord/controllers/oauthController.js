@@ -35,9 +35,9 @@ const client = new OAuth2Strategy({
         member = await discord.getGuildMember(profile.id);
       } catch (err) {
         await discord.addGuildMember(accessToken, profile.id);
-        await discord.addRoleToUser(profile.id, roles.communityMember);
         member = await discord.getGuildMember(profile.id);
       }
+      await discord.addRoleToUser(profile.id, roles.communityMember);
       try {
         const user = await DiscordConnection.userFromDiscord(profile, member, accessToken, refreshToken);
         done(null, user);
