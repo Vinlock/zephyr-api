@@ -28,10 +28,12 @@ module.exports = (server) => {
     io = socketIo(server);
   }
 
-  io.adapter(redis({
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
-  }));
+  if (process.env.REDIS_ENABLED === 'true') {
+    io.adapter(redis({
+      host: process.env.REDIS_HOST,
+      port: process.env.REDIS_PORT,
+    }));
+  }
 
   io.on('connection', function socketConnection(socket) {
     console.log('a user connected', socket.id);
