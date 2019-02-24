@@ -4,6 +4,7 @@ const gameRoles = {
   fortnite: '475242288604512256',
   wow: '488907425059962883',
   cod: '493488962321645586',
+  apex: '543960063593807872',
 };
 
 const roles = {
@@ -11,6 +12,7 @@ const roles = {
   deputy: '326508816311255050',
   centurion: '326508981680078848',
   legion: '326508598161047552',
+  communityMember: '334081200237051905',
 };
 
 const langRoles = {

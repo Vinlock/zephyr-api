@@ -55,13 +55,10 @@ discordConnectionSchema.statics = {
             discordConnection.refreshToken = refreshToken;
             discordConnection.save()
               .then(function (doc) {
-                console.log('doc', doc);
-                console.log('name', name);
                 doc.user.username = `${name}#${profile.discriminator}`;
                 doc.user.admin = profile.id === process.env.DISCORD_ADMIN;
                 doc.user.save()
                   .then(function (doc) {
-                    console.log('doc', doc);
                     res(doc);
                   });
               });

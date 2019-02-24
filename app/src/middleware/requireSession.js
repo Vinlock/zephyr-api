@@ -2,7 +2,9 @@ const APIError = require('../utils/APIError');
 
 const requireSession = () => (req, res, next) => {
   if (!req.user) {
-    return next(new APIError('INVALID_SESSION'));
+    const error = new APIError('INVALID_SESSION');
+    error.statusCode = 403;
+    return next(error);
   }
   return next();
 };

@@ -1,8 +1,9 @@
 require('dotenv').config();
 require('babel-polyfill');
 require('babel-register');
-require('./db');
+require('./db/index');
 const express = require('express');
+const http = require('http');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoSanitize = require('express-mongo-sanitize');
@@ -19,6 +20,7 @@ const axiosMiddleware = require('./middleware/axios');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const discordMiddleware = require('./middleware/discordApiMiddleware');
+const socketMiddleware = require('./middleware/socketMiddleware');
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -28,6 +30,7 @@ passport.deserializeUser(function(obj, done) {
 });
 
 const app = express();
+const server = http.Server(app);
 
 app.set('trust proxy', 1);
 
@@ -62,12 +65,15 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.text());
 
 app.use(mongoSanitize());
 
 app.use(validator());
 
 app.use(discordMiddleware());
+
+app.use(socketMiddleware(server));
 
 app.use(router);
 
@@ -107,4 +113,6 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 4000;
 
-app.listen(port, () => console.log(`App is running on ${port}!`));
+server.listen(port, function startListening() {
+  console.log(`App is running on ${port}!`);
+});

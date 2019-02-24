@@ -5,6 +5,7 @@ yarn-error.log
 .DS_Store
 package-lock.json
 dist
+app/dist
 docs
 config.json
 apidoc
