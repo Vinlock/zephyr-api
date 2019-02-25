@@ -1,6 +1,8 @@
 const asyncErrorHandler = require('../../../utils/asyncErrorHandler');
 const { gameRoles, langRoles } = require('../../../lib/discord/enums');
 
+const USER_AVATAR_TEMPLATE = (userId, avatar) => `https://cdn.discordapp.com/avatars/${userId}/${avatar}.png`;
+
 const getProfile = async (req, res, next) => {
   try {
     let user = await req.user
@@ -16,6 +18,7 @@ const getProfile = async (req, res, next) => {
     result.username = `${name}#${discriminator}`;
     result.admin = await req.user.isAdmin() ? true : undefined;
     result.legionMember = await req.user.isLegionMember();
+    result.avatar = USER_AVATAR_TEMPLATE(user.discord.id, userData.user.avatar);
     const guildRoles = await req.discord.getGuildRoles();
     result.roles = {
       games: {},
