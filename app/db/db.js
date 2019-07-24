@@ -33,29 +33,25 @@ const {
   APP_MONGO_DATABASE_NAME,
 } = process.env;
 
-const createMongo = (database) => {
-  // eslint-disable-next-line
-  const connectionString = APP_MONGO_HOST;
-  const connectionOptions = {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-    dbName: database,
-    autoReconnect: true,
-  };
-  const hasUsername = Boolean(APP_MONGO_USERNAME && APP_MONGO_USERNAME.length > 0);
-  const hasPassword = Boolean(APP_MONGO_PASSWORD && APP_MONGO_PASSWORD.length > 0);
-  if (hasUsername && hasPassword) {
-    connectionOptions.user = APP_MONGO_USERNAME;
-    connectionOptions.pass = APP_MONGO_PASSWORD;
-  }
-
-  const hasReplicaSet = Boolean(APP_MONGO_REPLICA_SET && APP_MONGO_REPLICA_SET.length > 0);
-  if (hasReplicaSet) {
-    connectionOptions.replicaSet = APP_MONGO_REPLICA_SET;
-  }
-
-  return mongoose.createConnection(connectionString, connectionOptions);
+const connectionString = APP_MONGO_HOST;
+const connectionOptions = {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+  dbName: APP_MONGO_DATABASE_NAME,
+  autoReconnect: true,
 };
 
-module.exports = createMongo(APP_MONGO_DATABASE_NAME);
+const hasUsername = Boolean(APP_MONGO_USERNAME && APP_MONGO_USERNAME.length > 0);
+const hasPassword = Boolean(APP_MONGO_PASSWORD && APP_MONGO_PASSWORD.length > 0);
+if (hasUsername && hasPassword) {
+  connectionOptions.user = APP_MONGO_USERNAME;
+  connectionOptions.pass = APP_MONGO_PASSWORD;
+}
+
+const hasReplicaSet = Boolean(APP_MONGO_REPLICA_SET && APP_MONGO_REPLICA_SET.length > 0);
+if (hasReplicaSet) {
+  connectionOptions.replicaSet = APP_MONGO_REPLICA_SET;
+}
+
+module.exports = mongoose.createConnection(connectionString, connectionOptions);
