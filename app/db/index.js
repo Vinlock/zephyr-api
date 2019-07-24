@@ -24,7 +24,6 @@
  */
 
 import mongoose from 'mongoose';
-import Logger from '../lib/Logger';
 
 const {
   APP_MONGO_HOST,
@@ -32,8 +31,6 @@ const {
   APP_MONGO_PASSWORD,
   APP_MONGO_REPLICA_SET,
 } = process.env;
-
-const logger = new Logger({ name: 'mongo' });
 
 const createMongo = (database) => {
   // eslint-disable-next-line
@@ -57,36 +54,7 @@ const createMongo = (database) => {
     connectionOptions.replicaSet = APP_MONGO_REPLICA_SET;
   }
 
-  const connection = mongoose.createConnection(connectionString, connectionOptions);
-
-  connection.on('error', (err) => {
-    if (err.message && err.message.match(/failed to connect to server .* on first connect/)) {
-      logger.error('mongo.connection.fail', {
-        timestamp: new Date(),
-        error: String(err),
-      });
-
-      setTimeout(() => {
-        logger.log('mongo.connection.retry', { retry: true });
-        // Retry connection and avoid unhandled rejections with a catch statement.
-        connection.openUri(connectionString, connectionOptions).catch(() => {});
-      }, 20 * 1000);
-    } else {
-      // a different error happened, log it.
-      logger.error('mongo.error', {
-        timestamp: new Date(),
-        error: String(err),
-      });
-    }
-  });
-
-  // mongoose.set('debug', (coll, method, query, doc, options) => {
-  //   logger.log('mongo.query', {
-  //     coll, method, query, doc, options,
-  //   });
-  // });
-
-  return connection;
+  return mongoose.createConnection(connectionString, connectionOptions);
 };
 
 export default createMongo;
