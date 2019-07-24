@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const moment = require('moment');
-import db from '../db';
+const db = require('../db');
 
 const { Schema } = mongoose;
 

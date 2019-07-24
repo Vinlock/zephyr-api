@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const DiscordClient = require('../../lib/discord/discordClient');
 const { roles } = require('../../lib/discord/enums');
 const UserProfile = require('./UserProfile');
-import db from '../db';
+const db = require('../db');
 
 const { APP_DISCORD_ADMIN } = process.env;
 
