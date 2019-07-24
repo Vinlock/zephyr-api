@@ -30,6 +30,7 @@ const {
   APP_MONGO_USERNAME,
   APP_MONGO_PASSWORD,
   APP_MONGO_REPLICA_SET,
+  APP_MONGO_DATABASE_NAME,
 } = process.env;
 
 const createMongo = (database) => {
@@ -57,4 +58,4 @@ const createMongo = (database) => {
   return mongoose.createConnection(connectionString, connectionOptions);
 };
 
-export default createMongo;
+module.exports = createMongo(APP_MONGO_DATABASE_NAME);
