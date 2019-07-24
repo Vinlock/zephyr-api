@@ -57,10 +57,11 @@
     "nyc": "^12.0.2"
   },
   "scripts": {
-    "build": "babel -d ./app/dist ./app/src --source-maps inline --ignore '**/*.test.js' --copy-files",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prebuild": "rm -rf app/dist/*",
-    "start": "echo 'Please use WebStorm to run this... You will need env variables...' && exit 1",
-    "apidoc": "apidoc -i ./app/src -o apidoc/"
+    "prebuild": "rm -rf dist/*",
+    "build": "NODE_ENV=production babel -d ./dist ./app --source-maps --copy-files --verbose && next build dist/admin",
+    "start": "node dist/server.js",
+    "start:dev": "babel-node app/server.js",
+    "prestart": "yarn build",
+    "test": "jest"
   }
 }
