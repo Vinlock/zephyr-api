@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+import db from '../';
 
 const { Schema } = mongoose;
 
@@ -23,6 +24,6 @@ userProfileSchema.virtual('user', {
   justOne: true,
 });
 
-const UserProfile = mongoose.model('UserProfile', userProfileSchema);
+const UserProfile = db.model('UserProfile', userProfileSchema);
 
 module.exports = UserProfile;

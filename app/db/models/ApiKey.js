@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const uuid = require('uuid/v4');
+import db from '../';
 
 const { Schema } = mongoose;
 
@@ -23,6 +24,6 @@ apiKeySchema.virtual('user', {
   justOne: true,
 });
 
-const ApiKey = mongoose.model('ApiKey', apiKeySchema);
+const ApiKey = db.model('ApiKey', apiKeySchema);
 
 module.exports = ApiKey;

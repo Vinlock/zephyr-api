@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+import db from '../';
 
 const { Schema } = mongoose;
 
@@ -90,6 +91,6 @@ discordConnectionSchema.statics = {
   }
 };
 
-const DiscordConnection = mongoose.model('DiscordConnection', discordConnectionSchema);
+const DiscordConnection = db.model('DiscordConnection', discordConnectionSchema);
 
 module.exports = DiscordConnection;

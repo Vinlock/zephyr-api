@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const moment = require('moment');
+import db from '../';
 
 const { Schema } = mongoose;
 
@@ -28,6 +29,6 @@ const discordInviteSchema = new Schema({
   }
 });
 
-const DiscordInvite = mongoose.model('DiscordInvite', discordInviteSchema);
+const DiscordInvite = db.model('DiscordInvite', discordInviteSchema);
 
 module.exports = DiscordInvite;

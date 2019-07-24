@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const DiscordClient = require('../../lib/discord/discordClient');
 const { roles } = require('../../lib/discord/enums');
 const UserProfile = require('./UserProfile');
+import db from '../';
 
 const { APP_DISCORD_ADMIN } = process.env;
 
@@ -73,6 +74,6 @@ userSchema.post('save', function (doc, next) {
     });
 });
 
-const User = mongoose.model('User', userSchema);
+const User = db.model('User', userSchema);
 
 module.exports = User;
