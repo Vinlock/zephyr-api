@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.339.0",
+    "aws-sdk": "^2.498.0",
     "axios": "^0.18.0",
     "babel-polyfill": "6.26.0",
     "babel-register": "^6.26.0",
@@ -51,9 +51,11 @@
     "eslint": "^5.4.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
+    "minimist": "^1.2.0",
     "mocha": "^5.2.0",
     "nock": "~9.2.3",
-    "nyc": "^12.0.2"
+    "nyc": "^12.0.2",
+    "ora": "^3.4.0"
   },
   "scripts": {
     "prebuild": "rm -rf dist/*",
