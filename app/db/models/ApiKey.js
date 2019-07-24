@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const uuid = require('uuid/v4');
-import db from '../';
+import db from '../db';
 
 const { Schema } = mongoose;
 

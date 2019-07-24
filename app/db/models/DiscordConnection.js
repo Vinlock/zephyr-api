@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-import db from '../';
+import db from '../db';
 
 const { Schema } = mongoose;
 
