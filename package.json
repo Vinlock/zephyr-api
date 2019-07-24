@@ -58,7 +58,7 @@
   },
   "scripts": {
     "prebuild": "rm -rf dist/*",
-    "build": "NODE_ENV=production babel -d ./dist ./app --source-maps --copy-files --verbose && next build dist/admin",
+    "build": "NODE_ENV=production babel -d ./dist ./app --source-maps --copy-files --verbose",
     "start": "node dist/server.js",
     "start:dev": "babel-node app/server.js",
     "prestart": "yarn build",
