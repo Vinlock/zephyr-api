@@ -1,4 +1,4 @@
-const axios = require('app/middleware/axios');
+const axios = require('axios');
 
 const _logRequest = (logger) => (request) => {
   const requestLog = {
