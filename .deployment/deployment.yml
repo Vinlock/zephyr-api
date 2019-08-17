@@ -18,7 +18,7 @@ spec:
       - ReadWriteOnce
     resources:
       requests:
-        storage: 10Gi
+        storage: 5Gi
 ---
 apiVersion: kubedb.com/v1alpha1
 kind: Redis
@@ -28,13 +28,13 @@ spec:
   version: 4.0-v2
   mode: Cluster
   cluster:
-    master: 1
+    master: 3
     replicas: 1
   storageType: Durable
   storage:
     resources:
       requests:
-        storage: 10Gi
+        storage: 5Gi
     storageClassName: "default"
     accessModes:
       - ReadWriteOnce
