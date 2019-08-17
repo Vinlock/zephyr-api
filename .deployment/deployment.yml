@@ -28,7 +28,7 @@ spec:
   version: 4.0-v2
   mode: Cluster
   cluster:
-    master: 3
+    master: 1
     replicas: 1
   storageType: Durable
   storage:
