@@ -33,16 +33,6 @@ spec:
               value: "production"
             - name: AWS_REGION
               value: "{{AWS_REGION}}"
-            - name: APP_MONGO_HOST
-              value: "mongodb://{{APP_NAME}}-mongo"
-            - name: APP_MONGO_REPLICA_SET
-              value: "rs0"
-            - name: APP_REDIS_HOST
-              value: "{{APP_NAME}}-redis"
-            - name: APP_REDIS_PORT
-              value: "6379"
-            - name: APP_REDIS_ENABLED
-              value: "true"
           envFrom:
             - secretRef:
                 name: "{{APP_NAME}}-{{CIRCLE_BRANCH}}"
