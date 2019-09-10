@@ -20,28 +20,6 @@ spec:
       requests:
         storage: 5Gi
 ---
-apiVersion: kubedb.com/v1alpha1
-kind: Redis
-metadata:
-  name: {{APP_NAME}}-redis
-spec:
-  version: 4.0-v2
-  mode: Cluster
-  cluster:
-    master: 3
-    replicas: 1
-  storageType: Durable
-  storage:
-    resources:
-      requests:
-        storage: 5Gi
-    storageClassName: "default"
-    accessModes:
-      - ReadWriteOnce
-  terminationPolicy: Pause
-  updateStrategy:
-    type: RollingUpdate
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -86,19 +64,7 @@ spec:
               value: "6379"
             - name: APP_REDIS_ENABLED
               value: "true"
-#            - name: APP_MONGO_PASSWORD
-#              valueFrom:
-#                secretKeyRef:
-#                  name: "{{APP_NAME}}-mongo-auth"
-#                  key: password
-#            - name: APP_MONGO_USERNAME
-#              valueFrom:
-#                secretKeyRef:
-#                  name: "{{APP_NAME}}-mongo-auth"
-#                  key: username
           envFrom:
-            - configMapRef:
-                name: "{{APP_NAME}}-{{CIRCLE_BRANCH}}-env"
             - secretRef:
                 name: "{{APP_NAME}}-{{CIRCLE_BRANCH}}"
 ---
