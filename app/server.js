@@ -78,7 +78,7 @@ app.use(validator());
 
 app.use(discordMiddleware());
 
-app.use(socketMiddleware(server));
+// app.use(socketMiddleware(server));
 
 app.use(router);
 
